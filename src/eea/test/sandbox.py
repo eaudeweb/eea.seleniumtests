@@ -1,3 +1,4 @@
+import time
 import unittest
 import eea.test.util as util
 
@@ -5,6 +6,7 @@ from edw.seleniumtesting.common import BrowserTestCase
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 FINDER = util.ElementFinder()
 
@@ -41,24 +43,45 @@ class Sandbox(BrowserTestCase):
 
     @util.runas('manager')
     def test_add_page(self):
-        """ Test sector expert can add question.
+        """ Add page
         """
-        # Add questions
+        self.browser.get(self.url)
+        WebDriverWait(self.browser, 10).until(
+            EC.visibility_of_element_located((By.ID, 'tlspu_cookiepolicy_button'))
+        )
+        FINDER.css('#tlspu_cookiepolicy_button').click()
+        FINDER.css('#plone-contentmenu-factories').click()
         FINDER.css('#document').click()
         f_title = FINDER.css('#title')
         f_title.send_keys('Test document.')
 
         FINDER.css('#fieldsetlegend-categorization').click()
-        f_keywords = FINDER.css('#subject_keywords')
+        f_keywords = FINDER.css('#token-input-subject_keywords')
         f_keywords.send_keys('bathing')
+        f_keywords.send_keys(Keys.RETURN)
 
         FINDER.css('#location-edit').click()
+        WebDriverWait(self.browser, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '.eea-geotags-popup'))
+        )
+        WebDriverWait(self.browser, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '.geo-results-search'))
+        )
         f_search = FINDER.css('.geo-results-search input[name="search"]')
         f_search.send_keys('Bucharest')
         FINDER.css('.geo-results-search input[name="submit"]').click()
+
+        WebDriverWait(self.browser, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '.geo-point-view'))
+        )
         FINDER.css('.geo-point-view').click()
 
-        FINDER.xpath('//button[contains(.,"Save geotags")]')
+        time.sleep(3)
+        FINDER.xpath('//button[contains(.,"Save geotags")]').click()
+
+        WebDriverWait(self.browser, 10).until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, '.ui-widget-overlay'))
+        )
 
         FINDER.css('#themes_options option[value="default"]').click()
         FINDER.css('input[value=">>"]').click()

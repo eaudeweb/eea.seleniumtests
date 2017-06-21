@@ -1,26 +1,26 @@
 from selenium.webdriver.common.keys import Keys
 
-class TestFactory(object):                                                                                                
-    
+class TestFactory(object):
+
     def __init__(self, suite, **kwargs):
-        
+
         self.suite = suite
-        self.params = kwargs 
-        
-    def __call__(self): 
-        
+        self.params = kwargs
+
+    def __call__(self):
+
         return self.suite
-            
-    def add_tests(self, test_class):      
-        for name in test_class.my_tests(): 
+
+    def add_tests(self, test_class):
+        for name in test_class.my_tests():
             self.suite.addTest(
                 test_class(
-                    name,                 
+                    name,
                     self.params["browser"],
-                    self.params["base_url"],  
+                    self.params["base_url"],
                     self.params["extra_args"],
                     )
-                ) 
+                )
 
 def runas(role='', user='', pwd_from='users', usr_from='roles'):
     def decorator(func):
@@ -39,15 +39,15 @@ def runas(role='', user='', pwd_from='users', usr_from='roles'):
             self.browser.get(self.url + '/login')
 
             # get form fields
-            login_name = self.browser.find_element_by_id("__ac_name")
-            passwd = self.browser.find_element_by_id("__ac_password")
+            login_name = self.browser.find_element_by_css_selector("#content #__ac_name")
+            passwd = self.browser.find_element_by_css_selector("#content #__ac_password")
 
             # fill in form
             login_name.send_keys(username)
             passwd.send_keys(password)
 
             # submit
-            self.browser.find_element_by_name("submit").send_keys(Keys.RETURN)
+            self.browser.find_element_by_css_selector('#content [type="submit"]').send_keys(Keys.RETURN)
 
             self.browser.get(came_from)
 
