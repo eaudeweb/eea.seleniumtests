@@ -45,30 +45,34 @@ class Sandbox(BrowserTestCase):
     def test_add_page(self):
         """ Add page
         """
-        self.browser.get(self.url)
+        # Accept cookie
         WebDriverWait(self.browser, 10).until(
             EC.visibility_of_element_located((By.ID, 'tlspu_cookiepolicy_button'))
         )
         FINDER.css('#tlspu_cookiepolicy_button').click()
-        WebDriverWait(self.browser, 10).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, '#plone-contentmenu-factories'))
-        )
-        FINDER.css('#plone-contentmenu-factories').click()
-        FINDER.css('#document').click()
+
+        # Add Page page
+        self.browser.get(self.url + '/createObject?type_name=Document')
+
+        # Page title
         f_title = FINDER.css('#title')
         f_title.send_keys('Test document.')
 
+        # Categorization tab
         FINDER.css('#fieldsetlegend-categorization').click()
+
+        # Tags
         f_keywords = FINDER.css('#token-input-subject_keywords')
         f_keywords.send_keys('bathing')
         f_keywords.send_keys(Keys.RETURN)
 
+        # Location
         FINDER.css('#location-edit').click()
         WebDriverWait(self.browser, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, '.eea-geotags-popup'))
         )
         WebDriverWait(self.browser, 10).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, '.geo-results-search'))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '.geo-results-search input[name="search"]'))
         )
         f_search = FINDER.css('.geo-results-search input[name="search"]')
         f_search.send_keys('Bucharest')
@@ -79,14 +83,20 @@ class Sandbox(BrowserTestCase):
         )
         FINDER.css('.geo-point-view').click()
 
+        # Wait for animations
         time.sleep(3)
+
+        # Save location
         FINDER.xpath('//button[contains(.,"Save geotags")]').click()
 
+        # Wait for overlay to go away
         WebDriverWait(self.browser, 10).until(
             EC.invisibility_of_element_located((By.CSS_SELECTOR, '.ui-widget-overlay'))
         )
 
+        # Set Theme
         FINDER.css('#themes_options option[value="default"]').click()
         FINDER.css('input[value=">>"]').click()
 
+        # Save Page
         FINDER.css('input[name="form.button.save"]').click()

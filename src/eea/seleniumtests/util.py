@@ -47,7 +47,7 @@ def runas(role='', user='', pwd_from='users', usr_from='roles'):
             passwd.send_keys(password)
 
             # submit
-            self.browser.find_element_by_css_selector('#content [type="submit"]').send_keys(Keys.RETURN)
+            self.browser.find_element_by_css_selector('#content [type="submit"]').click()
 
             self.browser.get(came_from)
 
