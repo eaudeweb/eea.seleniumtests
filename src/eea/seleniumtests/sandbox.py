@@ -1,6 +1,6 @@
 import time
 import unittest
-import eea.test.util as util
+import eea.seleniumtests.util as util
 
 from edw.seleniumtesting.common import BrowserTestCase
 from selenium.webdriver.support.ui import WebDriverWait
@@ -15,7 +15,7 @@ def suite(browser, base_url, extra_args):
     """ Call on review folder url providing user mapping and user accounts.\n
     `` seleniumtesting http://localhost/Plone/ \\
         -ea roles manager username \\
-        -ea users username password
+        -ea users username "$(< pwd_file)"
     ``
     """
     FINDER.set_browser(browser)
@@ -50,6 +50,9 @@ class Sandbox(BrowserTestCase):
             EC.visibility_of_element_located((By.ID, 'tlspu_cookiepolicy_button'))
         )
         FINDER.css('#tlspu_cookiepolicy_button').click()
+        WebDriverWait(self.browser, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '#plone-contentmenu-factories'))
+        )
         FINDER.css('#plone-contentmenu-factories').click()
         FINDER.css('#document').click()
         f_title = FINDER.css('#title')

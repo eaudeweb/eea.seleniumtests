@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Installer for the eea.test package."""
+"""Installer for the eea.seleniumtests package."""
 
 from setuptools import find_packages
 from setuptools import setup
@@ -13,7 +13,7 @@ LONG_DESCRIPTION = '\n\n'.join([
 
 
 setup(
-    name='eea.test',
+    name='eea.seleniumtests',
     version='1.0a1',
     description="eea testing metapackage",
     long_description=LONG_DESCRIPTION,
@@ -27,7 +27,7 @@ setup(
     keywords='Python Plone',
     author='David Bătrânu',
     author_email='david.batranu@eaudeweb.ro',
-    url='https://pypi.python.org/pypi/eea.test',
+    url='https://pypi.python.org/pypi/eea.seleniumtests',
     license='GPL version 3',
     packages=find_packages('src', exclude=['ez_setup']),
     namespace_packages=['eea'],
@@ -40,7 +40,7 @@ setup(
     ],
     entry_points={
         'edw.seleniumtesting': [
-            'eea.test.sandbox = eea.test.sandbox:suite',
+            'eea.seleniumtests.sandbox = eea.seleniumtests.sandbox:suite',
         ]
     }
 )
